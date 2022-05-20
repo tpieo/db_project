@@ -59,8 +59,8 @@
 <body>
 	<div class="search-box">
 		<input id="search-bar" type="text" name="q" autocomplete="off" placeholder="输入 老师 或 课程 进行搜索">
-		<input id="search-btn" type="button" value="搜索"><br>
-		<div>F12 点击 控制台 或 console 查看搜索结果</div>
+		<input id="search-btn" type="button" value="搜索"><br><br>
+		<div>按 F12 点击 控制台 或 console 查看搜索结果</div>
 	</div>
 </body>
 <script>
@@ -69,6 +69,7 @@
 	const div = document.querySelector('div')
 
 	let cache = {}
+	let cacheSize = 0
 
 	searchBtn.addEventListener('click', e => {
 		e.preventDefault()
@@ -84,12 +85,19 @@
 
 	function query() {
 		q = queryText['value']
-		// for (int i = 0; i < )
+		for (const [key, value] of Object.entries(cache)) {
+			if (q === key) {
+				console.log("cache")
+				console.log(value)
+				return 
+			}
+		}
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
 			if(xhr.readyState == 4 && xhr.status == 200) {
-				showResult(xhr.responseText)
-				// cacheResult(xhr.responseText)
+				r = JSON.parse(xhr.responseText)
+				showResult(r)
+				cacheResult(q, r)
 			}
 		}
 		
@@ -97,9 +105,27 @@
 		xhr.send()
 	}
 
-	function showResult(responseText) {
-		const r = JSON.parse(responseText)
+	function showResult(r) {
 		console.log(r)
+	}
+
+	function cacheResult(q, r) {
+		cache[q] = r
+		cacheSize++
+		if (cacheSize >= 11) {
+			size = Object.keys(cache).length
+			j = Math.floor(Math.random() * size)
+			i = 0
+			console.log(i, j)
+			for (const [key, value] of Object.entries(cache)) {
+				if (i === j) {
+					delete cache[key]
+					cacheSize--
+					console.log("cacheSize--")
+					return
+				}
+			}
+		}
 	}
 </script>
 </html>
