@@ -2,7 +2,6 @@ package views
 
 import (
 	"SZUCourse/global"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +21,6 @@ func Query(c *gin.Context) {
 	global.Lock.RUnlock()
 	if ok {
 		c.JSON(200, value)
-		fmt.Println("cache")
 		return
 	}
 
@@ -52,6 +50,8 @@ func search(queryString string) []Course {
 
 func cache(queryString string, result map[int]interface{}) {
 
+	// FIFO
+
 	global.Lock.Lock()
 	defer global.Lock.Unlock()
 
@@ -62,7 +62,6 @@ func cache(queryString string, result map[int]interface{}) {
 	}
 
 	global.Cache[queryString] = result
-
 }
 
 type Course struct {

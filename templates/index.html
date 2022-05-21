@@ -112,12 +112,10 @@
 	function cacheResult(q, result) {
 		cache[q] = result
 		queryStringQueue.push(q)
-		if (queryStringQueue.length >= 11) {
+		if (queryStringQueue.length > 10) {
 			let key = queryStringQueue.shift()
 			delete cache[key]
 		}
-		console.log(queryStringQueue)
-		console.log(cache)
 	}
 </script>
 </html>
