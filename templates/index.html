@@ -55,6 +55,7 @@
 			outline: 0;
 		}
 	</style>
+	<!-- <link rel="shortcut icon" href="#"> -->
 </head>
 <body>
 	<div class="search-box">
@@ -64,12 +65,12 @@
 	</div>
 </body>
 <script>
+
 	const queryText = document.querySelector('[type=text]')
 	const searchBtn = document.querySelector('[type=button]')
-	const div = document.querySelector('div')
 
 	let cache = {}
-	let cacheSize = 0
+	let queryStringQueue = []
 
 	searchBtn.addEventListener('click', e => {
 		e.preventDefault()
@@ -87,17 +88,16 @@
 		q = queryText['value']
 		for (const [key, value] of Object.entries(cache)) {
 			if (q === key) {
-				console.log("cache")
-				console.log(value)
+				showResult(value)
 				return 
 			}
 		}
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
 			if(xhr.readyState == 4 && xhr.status == 200) {
-				r = JSON.parse(xhr.responseText)
-				showResult(r)
-				cacheResult(q, r)
+				result = JSON.parse(xhr.responseText)
+				showResult(result)
+				cacheResult(q, result)
 			}
 		}
 		
@@ -105,27 +105,19 @@
 		xhr.send()
 	}
 
-	function showResult(r) {
-		console.log(r)
+	function showResult(result) {
+		console.log(result)
 	}
 
-	function cacheResult(q, r) {
-		cache[q] = r
-		cacheSize++
-		if (cacheSize >= 11) {
-			size = Object.keys(cache).length
-			j = Math.floor(Math.random() * size)
-			i = 0
-			console.log(i, j)
-			for (const [key, value] of Object.entries(cache)) {
-				if (i === j) {
-					delete cache[key]
-					cacheSize--
-					console.log("cacheSize--")
-					return
-				}
-			}
+	function cacheResult(q, result) {
+		cache[q] = result
+		queryStringQueue.push(q)
+		if (queryStringQueue.length >= 11) {
+			let key = queryStringQueue.shift()
+			delete cache[key]
 		}
+		console.log(queryStringQueue)
+		console.log(cache)
 	}
 </script>
 </html>
