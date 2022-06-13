@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,11 +55,11 @@
 			outline: 0;
 		}
 	</style>
-	<!-- <link rel="shortcut icon" href="#"> -->
+	<link rel="shortcut icon" href="#">
 </head>
 <body>
 	<div class="search-box">
-		<input id="search-bar" type="text" name="q" autocomplete="off" placeholder="输入 老师 或 课程 进行搜索">
+		<input id="search-bar" type="text" name="q" autocomplete="off" placeholder="输入 老师 或 课程 搜索">
 		<input id="search-btn" type="button" value="搜索"><br><br>
 		<div>按 F12 点击 控制台 或 console 查看搜索结果</div>
 	</div>
@@ -86,6 +86,9 @@
 
 	function query() {
 		q = queryText['value']
+		if (q === "刚哥") {
+			q = "彭小刚";
+		}
 		for (const [key, value] of Object.entries(cache)) {
 			if (q === key) {
 				showResult(value)
